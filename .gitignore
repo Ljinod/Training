@@ -27,6 +27,6 @@
 *.out
 *.app
 
-# Log and tests files
-*.txt
+# Log files
 *.log
+*.key
