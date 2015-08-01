@@ -1,10 +1,5 @@
-HackerRank: www.hackerrank.com
-==============================
+Training repo
+=======================
 
-I use this repo to store possible solutions for the problems submitted at "HackerRank".
-I do those exercises in order to improve in C++ and more generally in computer science - algorithms, etc...
-I do think that I am really far from being good so if you find mistakes or believe that the code you see can be improved - even slightly - feel free to tell me!
-
-
-
-Julien
+In this repo I store all the solutions that I came up with for problems submitted on sites that aim at improving skills in programming and algorithmics.
+This repo is organised as following: you will find a folder for each site that I visit and within a folder for each programming langage that I used. On the master branch only the solutions that were approuved are pushed. Other, work-in-progress, solutions are in their corresponding branches.
