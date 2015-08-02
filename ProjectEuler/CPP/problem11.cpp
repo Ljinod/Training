@@ -7,6 +7,7 @@
  *          direction (up, down, left, right or diagonally) in the 20x20 grid
  *          below?
  *
+ * SOLUTION: 70600674
  */
 
 #include <iostream>
@@ -43,29 +44,22 @@ void scan_grid(Direction, long*);
 
 int main()
 {
-    //long hor_product, ver_product, diag_r_product, diag_l_product;
-    long hor_product, ver_product;
+    long hor_product=0, ver_product=0, diag_r_product=0, diag_l_product=0;
     std::thread thread_hor   (scan_grid, HORIZONTAL, &hor_product);
-    thread_hor.join();
     std::thread thread_ver   (scan_grid, VERTICAL, &ver_product);
+    std::thread thread_diag_r(scan_grid, DIAGONAL_RIGHT, &diag_r_product);
+    std::thread thread_diag_l(scan_grid, DIAGONAL_LEFT, &diag_l_product);
+
+    thread_hor.join();
     thread_ver.join();
-    //std::thread thread_diag_r(scan_grid, DIAGONAL_RIGHT, &diag_r_product);
-    //std::thread thread_diag_l(scan_grid, DIAGONAL_LEFT, &diag_l_product);
-
-    //thread_diag_r.join();
-    //thread_diag_l.join();
-
-    std::cout << "ver_product: " << ver_product << std::endl;
-    std::cout << "hor_product: " << hor_product << std::endl;
-    //std::cout << "diag_l_product: " << diag_l_product << std::endl;
-    //std::cout << "diag_r_product: " << diag_r_product << std::endl;
+    thread_diag_r.join();
+    thread_diag_l.join();
 
     long greatest_hv = hor_product < ver_product ? ver_product : hor_product;
-    //long greatest_diag_lr = diag_r_product < diag_l_product ? diag_l_product : diag_r_product;
-    //long greatest_product = greatest_hv < greatest_diag_lr ? greatest_diag_lr : greatest_hv;
+    long greatest_diag_lr = diag_r_product < diag_l_product ? diag_l_product : diag_r_product;
+    long greatest_product = greatest_hv < greatest_diag_lr ? greatest_diag_lr : greatest_hv;
 
-    std::cout << "The greatest product is: " << greatest_hv << std::endl;
-    //std::cout << "The greatest product is: " << greatest_product << std::endl;
+    std::cout << "The greatest product is: " << greatest_product << std::endl;
     return 0;
 }
 
@@ -94,18 +88,22 @@ void scan_grid(Direction dir, long *dir_product)
     {
         for(int i=0; i < scan_iter_max; i++)
         {
-            product = grid[i][i] * grid[i+1][i+1] * grid[i+2][i+2] * grid[i+3][i+3];
-            *dir_product = *dir_product < product ? product : *dir_product;
+            for(int j=0; j < scan_iter_max; j++)
+            {
+                product = grid[i][j] * grid[i+1][j+1] * grid[i+2][j+2] * grid[i+3][j+3];
+                *dir_product = *dir_product < product ? product : *dir_product;
+            }
         }
     }
     else if(dir == DIAGONAL_LEFT)
     {
-        for(int i=grid_size-1; i > 2; i--)
+        for(int i=0; i < scan_iter_max; i++)
         {
-            std::cout << grid[i][i] << " * " << grid[i-1][i-1] << " * " << grid[i-2][i-2] << " * "
-                      << grid[i-3][i-3] << std::endl;
-            product = grid[i][i] * grid[i-1][i-1] * grid[i-2][i-2] * grid[i-3][i-3];
-            *dir_product = *dir_product < product ? product : *dir_product;
+            for(int j=grid_size-1; j > 2; j--)
+            {
+                product = grid[i][j] * grid[i+1][j-1] * grid[i+2][j-2] * grid[i+3][j-3];
+                *dir_product = *dir_product < product ? product : *dir_product;
+            }
         }
     }
 }
